@@ -4,10 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Books extends Model
-{
-    public function author()
-    {
+class Books extends Model {
+
+    public function author() {
         return $this->belongsTo(Author::class);
     }
 }
