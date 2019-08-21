@@ -16,7 +16,8 @@ class BooksController extends Controller
     public function index()
     {
 
-        return BooksResource::collection(Books::all());
+        $books = Books::with('author')->get();
+        return BooksResource::collection($books);
     }
 
     /**
