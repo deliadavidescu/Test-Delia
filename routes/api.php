@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('books','BooksController@index');
+Route::get('create','BooksController@store');

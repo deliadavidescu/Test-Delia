@@ -1759,6 +1759,13 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({});
 
 /***/ }),
@@ -37067,15 +37074,15 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("section", [
-      _c("form", { attrs: { action: "/action_page.php" } }, [
+      _c("form", [
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "email" } }, [_vm._v("Email:")]),
+          _c("label", { attrs: { for: "title" } }, [_vm._v("Book Title")]),
           _vm._v(" "),
           _c("input", {
             staticClass: "form-control",
             attrs: {
-              type: "email",
-              id: "email",
+              type: "text",
+              id: "title",
               placeholder: "Enter email",
               name: "email"
             }
@@ -37083,29 +37090,68 @@ var staticRenderFns = [
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
-          _c("label", { attrs: { for: "pwd" } }, [_vm._v("Password:")]),
+          _c("label", { attrs: { for: "release_date" } }, [
+            _vm._v("Release Date")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "date",
+              id: "release_date",
+              placeholder: "Enter email",
+              name: "email"
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "author" } }, [_vm._v("Author Name")]),
           _vm._v(" "),
           _c("input", {
             staticClass: "form-control",
             attrs: {
               type: "password",
-              id: "pwd",
-              placeholder: "Enter password",
+              id: "author",
+              placeholder: "Enter Author Name",
               name: "pwd"
             }
           })
         ]),
         _vm._v(" "),
-        _c("div", { staticClass: "checkbox" }, [
-          _c("label", [
-            _c("input", { attrs: { type: "checkbox", name: "remember" } }),
-            _vm._v(" Remember me")
-          ])
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "address" } }, [
+            _vm._v("Author Address")
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "address",
+              placeholder: "Enter Author Name",
+              name: "pwd"
+            }
+          })
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "age" } }, [_vm._v("Author Age")]),
+          _vm._v(" "),
+          _c("input", {
+            staticClass: "form-control",
+            attrs: {
+              type: "text",
+              id: "age",
+              placeholder: "Enter Author Name",
+              name: "pwd"
+            }
+          })
         ]),
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-default", attrs: { type: "submit" } },
+          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
           [_vm._v("Submit")]
         )
       ])

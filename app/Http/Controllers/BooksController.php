@@ -3,18 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Books;
+use App\Author;
 use App\Http\Resources\BooksResource;
 use Illuminate\Http\Request;
 
-class BooksController extends Controller
-{
+class BooksController extends Controller {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index() {
 
         $books = Books::with('author')->get();
         return BooksResource::collection($books);
@@ -25,64 +25,76 @@ class BooksController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
+    public function create() {
         //
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        //
+    public function store(Request $request) {
+        
+        $input = $request->all();
+
+        $author = Author::create([
+            'name' => $input["author"],
+            'age' => $input["age"],
+            'address' => $input["address"],
+        ]);
+        Books::create([
+            'name' => $input["title"],
+            'author_id' => $author->id,
+            "release_date" => $input["release_date"],
+        ]);
+
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Books  $books
+     * @param \App\Books $books
+     *
      * @return \Illuminate\Http\Response
      */
-    public function show(Books $books)
-    {
+    public function show(Books $books) {
         //
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Books  $books
+     * @param \App\Books $books
+     *
      * @return \Illuminate\Http\Response
      */
-    public function edit(Books $books)
-    {
+    public function edit(Books $books) {
         //
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Books  $books
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Books $books
+     *
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Books $books)
-    {
+    public function update(Request $request, Books $books) {
         //
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Books  $books
+     * @param \App\Books $books
+     *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Books $books)
-    {
+    public function destroy(Books $books) {
         //
     }
 }
