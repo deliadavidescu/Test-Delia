@@ -1860,13 +1860,44 @@ module.exports = function isBuffer (obj) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      books: null
+    };
+  },
+  methods: {
+    displayBooks: function displayBooks() {
+      var _this = this;
+
+      console.log("works");
+      console.log(this.form);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/books').then(function (response) {
+        _this.books = response;
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -1879,6 +1910,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
 //
 //
 //
@@ -1907,7 +1940,31 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      form: {
+        authorName: '',
+        bookTitle: '',
+        address: '',
+        age: null,
+        date: null
+      }
+    };
+  },
+  methods: {
+    createNewInput: function createNewInput() {
+      console.log("works");
+      console.log(this.form);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
+  }
+});
 
 /***/ }),
 
@@ -37183,7 +37240,31 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", [_vm._v("\n    books\n")])
+  return _c("section", [
+    _c("button", { on: { click: _vm.displayBooks } }, [
+      _vm._v("Show all books")
+    ]),
+    _vm._v(" "),
+    _vm.books !== null
+      ? _c(
+          "div",
+          _vm._l(_vm.books.data, function(index) {
+            return _c(
+              "div",
+              _vm._l(index, function(books) {
+                return _c("div", [
+                  _c("p", [_vm._v(_vm._s(books.name))]),
+                  _vm._v(" "),
+                  _c("p", [_vm._v(_vm._s(books.author.name))])
+                ])
+              }),
+              0
+            )
+          }),
+          0
+        )
+      : _vm._e()
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -37207,25 +37288,46 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", [
-      _c("form", [
+  return _c("section", [
+    _c(
+      "form",
+      {
+        attrs: { method: "post" },
+        on: {
+          submit: function($event) {
+            $event.preventDefault()
+            return _vm.createNewInput($event)
+          }
+        }
+      },
+      [
         _c("div", { staticClass: "form-group" }, [
           _c("label", { attrs: { for: "title" } }, [_vm._v("Book Title")]),
           _vm._v(" "),
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.bookTitle,
+                expression: "form.bookTitle"
+              }
+            ],
             staticClass: "form-control",
             attrs: {
               type: "text",
               id: "title",
               placeholder: "Enter email",
-              name: "email"
+              name: "title"
+            },
+            domProps: { value: _vm.form.bookTitle },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "bookTitle", $event.target.value)
+              }
             }
           })
         ]),
@@ -37236,12 +37338,29 @@ var staticRenderFns = [
           ]),
           _vm._v(" "),
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.date,
+                expression: "form.date"
+              }
+            ],
             staticClass: "form-control",
             attrs: {
               type: "date",
               id: "release_date",
               placeholder: "Enter email",
-              name: "email"
+              name: "date"
+            },
+            domProps: { value: _vm.form.date },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "date", $event.target.value)
+              }
             }
           })
         ]),
@@ -37250,12 +37369,29 @@ var staticRenderFns = [
           _c("label", { attrs: { for: "author" } }, [_vm._v("Author Name")]),
           _vm._v(" "),
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.authorName,
+                expression: "form.authorName"
+              }
+            ],
             staticClass: "form-control",
             attrs: {
-              type: "password",
+              type: "text",
               id: "author",
               placeholder: "Enter Author Name",
-              name: "pwd"
+              name: "name"
+            },
+            domProps: { value: _vm.form.authorName },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "authorName", $event.target.value)
+              }
             }
           })
         ]),
@@ -37266,12 +37402,29 @@ var staticRenderFns = [
           ]),
           _vm._v(" "),
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.address,
+                expression: "form.address"
+              }
+            ],
             staticClass: "form-control",
             attrs: {
               type: "text",
               id: "address",
-              placeholder: "Enter Author Name",
-              name: "pwd"
+              placeholder: "Enter Author Address",
+              name: "address"
+            },
+            domProps: { value: _vm.form.address },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "address", $event.target.value)
+              }
             }
           })
         ]),
@@ -37280,12 +37433,29 @@ var staticRenderFns = [
           _c("label", { attrs: { for: "age" } }, [_vm._v("Author Age")]),
           _vm._v(" "),
           _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.form.age,
+                expression: "form.age"
+              }
+            ],
             staticClass: "form-control",
             attrs: {
               type: "text",
               id: "age",
-              placeholder: "Enter Author Name",
-              name: "pwd"
+              placeholder: "Enter Author Age",
+              name: "age"
+            },
+            domProps: { value: _vm.form.age },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.$set(_vm.form, "age", $event.target.value)
+              }
             }
           })
         ]),
@@ -37295,10 +37465,11 @@ var staticRenderFns = [
           { staticClass: "btn btn-primary", attrs: { type: "submit" } },
           [_vm._v("Submit")]
         )
-      ])
-    ])
-  }
-]
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
 render._withStripped = true
 
 

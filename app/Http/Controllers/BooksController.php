@@ -37,20 +37,19 @@ class BooksController extends Controller {
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request) {
-        
+
         $input = $request->all();
 
         $author = Author::create([
-            'name' => $input["author"],
-            'age' => $input["age"],
+            'name' => $input["authorName"],
+            'age' => (int)$input["age"],
             'address' => $input["address"],
         ]);
         Books::create([
-            'name' => $input["title"],
+            'name' => $input["bookTitle"],
             'author_id' => $author->id,
-            "release_date" => $input["release_date"],
+            "release_date" => date('Y-m-d',strtotime($input["date"]))
         ]);
-
     }
 
     /**
