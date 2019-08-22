@@ -1955,8 +1955,6 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     createNewInput: function createNewInput() {
-      console.log("works");
-      console.log(this.form);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
         console.log(response);
       })["catch"](function (error) {

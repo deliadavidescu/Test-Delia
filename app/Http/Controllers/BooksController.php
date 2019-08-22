@@ -16,7 +16,7 @@ class BooksController extends Controller {
      */
     public function index() {
 
-        $books = Books::with('author')->get();
+        $books = Books::with('author')->get()->sortByDesc('created_at');
         return BooksResource::collection($books);
     }
 

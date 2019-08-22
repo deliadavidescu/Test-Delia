@@ -43,8 +43,6 @@ import axios from 'axios'
         },
         methods:{
           createNewInput(){
-                console.log("works")
-                console.log(this.form)
                 axios.post('/api/create', this.form)
                     .then((response) => {
                         console.log(response)
