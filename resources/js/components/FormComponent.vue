@@ -1,5 +1,8 @@
 <template>
     <section>
+        <div class="alert alert-danger">
+            <p v-for="error in errors">{{error[0]}}</p>
+        </div>
         <form method="post" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
@@ -37,7 +40,8 @@ import axios from 'axios'
                     address:'',
                     age:null,
                     date:null
-                }
+                },
+                errors:null
 
             }
         },
@@ -47,7 +51,8 @@ import axios from 'axios'
                     .then((response) => {
                         console.log(response)
                     }).catch((error) => {
-                        console.log(error);
+                        console.log(error.response.data.errors);
+                        this.errors=error.response.data.errors;
                     });
             }
         }

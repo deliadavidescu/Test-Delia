@@ -39,6 +39,7 @@ class BooksController extends Controller {
     public function store(Request $request) {
 
         $input = $request->all();
+        $request->validate(['authorName'=>'required|max:10','bookTitle'=>'required|max:10']);
 
         $author = Author::create([
             'name' => $input["authorName"],

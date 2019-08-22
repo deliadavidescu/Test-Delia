@@ -1940,6 +1940,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -1950,15 +1953,19 @@ __webpack_require__.r(__webpack_exports__);
         address: '',
         age: null,
         date: null
-      }
+      },
+      errors: null
     };
   },
   methods: {
     createNewInput: function createNewInput() {
+      var _this = this;
+
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
         console.log(response);
       })["catch"](function (error) {
-        console.log(error);
+        console.log(error.response.data.errors);
+        _this.errors = error.response.data.errors;
       });
     }
   }
@@ -37287,6 +37294,15 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("section", [
+    _c(
+      "div",
+      { staticClass: "alert alert-danger" },
+      _vm._l(_vm.errors, function(error) {
+        return _c("p", [_vm._v(_vm._s(error[0]))])
+      }),
+      0
+    ),
+    _vm._v(" "),
     _c(
       "form",
       {
