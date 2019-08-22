@@ -1,36 +1,29 @@
 <template>
     <section>
-<button @click="displayBooks">Show all books</button>
-       <div v-if="books !== null">
-           <div v-for="index in books.data">
-               <div v-for="books in index">
-                   <p>{{books.name}}</p>
-                   <p>{{books.author.name}}</p>
-               </div>
-           </div>
+        <div class="button" @click="showBooks = !showBooks">Show all books</div>
+        <div v-show="showBooks">
+            <div v-for="index in Books">
+                <div v-for="book in index">
+                    {{book.id}}
+                </div>
+            </div>
         </div>
-</section>
+    </section>
 </template>
 
 <script>
-    import axios from 'axios'
     export default {
         data() {
-            return{
-                books:null
+            return {
+                showBooks: false
             }
         },
-        methods:{
-            displayBooks(){
-                console.log("works")
-                console.log(this.form)
-                axios.get('/api/books')
-                    .then((response) => {
-                        this.books=response;
-                        console.log(response)
-                    }).catch((error) => {
-                    console.log(error);
-                });
+        mounted() {
+            this.$store.dispatch('loadData')
+        },
+        computed: {
+            Books() {
+                return this.$store.getters.Books
             }
         }
     }

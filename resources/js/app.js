@@ -5,6 +5,7 @@
  */
 
 require('./bootstrap');
+import store from './store';
 
 window.Vue = require('vue');
 
@@ -29,5 +30,6 @@ Vue.component('books-component', require('./components/BooksComponent.vue').defa
  */
 
 new Vue({
-    el: '#app'
+    el: '#app',
+    store
 });
