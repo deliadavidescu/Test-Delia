@@ -11,7 +11,7 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-<div id="app" class="container">
+<div id="app" class="container my-5">
     <form-component></form-component>
     <books-component></books-component>
 </div>

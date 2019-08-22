@@ -1,6 +1,6 @@
 <template>
-    <section>
-        <div class="alert alert-danger">
+    <section class="my-5">
+        <div v-if="errors" class="alert alert-danger">
             <p v-for="error in errors">{{error[0]}}</p>
         </div>
         <form method="post" @submit.prevent="createNewInput">
@@ -29,7 +29,7 @@
                 <input type="text" class="form-control" id="age" placeholder="Enter Author Age" name="age"
                        v-model="form.age">
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-success">Submit</button>
         </form>
     </section>
 </template>

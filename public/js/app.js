@@ -2622,6 +2622,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -49040,9 +49051,9 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("section", [
     _c(
-      "div",
+      "button",
       {
-        staticClass: "button",
+        staticClass: "btn btn-primary",
         on: {
           click: function($event) {
             _vm.showBooks = !_vm.showBooks
@@ -49069,7 +49080,31 @@ var render = function() {
           "div",
           _vm._l(index, function(book) {
             return _c("div", [
-              _vm._v("\n                " + _vm._s(book.id) + "\n            ")
+              _c("div", { staticClass: "card my-5" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("h5", { staticClass: "card-title" }, [
+                    _vm._v(_vm._s(book.name))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text font-italic" }, [
+                    _vm._v(_vm._s(book.author.name))
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("ul", { staticClass: "list-group list-group-flush" }, [
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Release date: " + _vm._s(book.release_date))
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Authore address: " + _vm._s(book.author.address))
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item" }, [
+                    _vm._v("Author Age: " + _vm._s(book.author.age) + " years")
+                  ])
+                ])
+              ])
             ])
           }),
           0
@@ -49101,15 +49136,17 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", [
-    _c(
-      "div",
-      { staticClass: "alert alert-danger" },
-      _vm._l(_vm.errors, function(error) {
-        return _c("p", [_vm._v(_vm._s(error[0]))])
-      }),
-      0
-    ),
+  return _c("section", { staticClass: "my-5" }, [
+    _vm.errors
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger" },
+          _vm._l(_vm.errors, function(error) {
+            return _c("p", [_vm._v(_vm._s(error[0]))])
+          }),
+          0
+        )
+      : _vm._e(),
     _vm._v(" "),
     _c(
       "form",
@@ -49284,7 +49321,7 @@ var render = function() {
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+          { staticClass: "btn btn-success", attrs: { type: "submit" } },
           [_vm._v("Submit")]
         )
       ]
