@@ -2698,6 +2698,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2709,7 +2712,8 @@ __webpack_require__.r(__webpack_exports__);
         age: null,
         date: null
       },
-      errors: null
+      errors: null,
+      success: false
     };
   },
   mounted: function mounted() {},
@@ -2719,6 +2723,18 @@ __webpack_require__.r(__webpack_exports__);
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
         _this.$store.dispatch('loadData');
+
+        _this.form.authorName = '';
+        _this.form.bookTitle = '';
+        _this.form.address = '';
+        _this.form.age = '';
+        _this.form.date = '';
+        _this.errors = null;
+        _this.success = true;
+        var obj = _this;
+        setTimeout(function () {
+          obj.success = false;
+        }, 2000);
       })["catch"](function (error) {
         console.log(error.response.data.errors);
         _this.errors = error.response.data.errors;
@@ -49146,6 +49162,12 @@ var render = function() {
           }),
           0
         )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.success
+      ? _c("div", { staticClass: "alert alert-success" }, [
+          _c("p", [_vm._v("Your form was sucessfully submitted.")])
+        ])
       : _vm._e(),
     _vm._v(" "),
     _c(

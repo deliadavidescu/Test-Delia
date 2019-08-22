@@ -3,6 +3,9 @@
         <div v-if="errors" class="alert alert-danger">
             <p v-for="error in errors">{{error[0]}}</p>
         </div>
+        <div v-if="success" class="alert alert-success">
+            <p>Your form was sucessfully submitted.</p>
+        </div>
         <form method="post" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
@@ -47,16 +50,30 @@
                     age: null,
                     date: null
                 },
-                errors: null
+                errors: null,
+                success:false
             }
         },
         mounted() {
         },
         methods: {
             createNewInput() {
+
                 axios.post('/api/create', this.form)
                     .then((response) => {
                         this.$store.dispatch('loadData')
+                        this.form.authorName = '';
+                        this.form.bookTitle = '';
+                        this.form.address = '';
+                        this.form.age= '';
+                        this.form.date = '';
+                        this.errors=null;
+                        this.success=true;
+                        var obj = this;
+                        setTimeout(function() {
+                            obj.success = false;
+                        }, 2000);
+
                     }).catch((error) => {
                     console.log(error.response.data.errors);
                     this.errors = error.response.data.errors;
