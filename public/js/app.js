@@ -2701,22 +2701,46 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       form: {
-        authorName: '',
-        bookTitle: '',
-        address: '',
+        authorName: null,
+        bookTitle: null,
+        address: null,
         age: null,
         date: null
       },
-      errors: null,
-      success: false
+      errors: [],
+      success: false,
+      validationErrors: {
+        authorName: null,
+        bookTitle: null,
+        address: null,
+        age: null,
+        date: null
+      }
     };
   },
-  mounted: function mounted() {},
   methods: {
     createNewInput: function createNewInput() {
       var _this = this;
@@ -2724,21 +2748,75 @@ __webpack_require__.r(__webpack_exports__);
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
         _this.$store.dispatch('loadData');
 
-        _this.form.authorName = '';
-        _this.form.bookTitle = '';
-        _this.form.address = '';
-        _this.form.age = '';
-        _this.form.date = '';
-        _this.errors = null;
-        _this.success = true;
+        _this.form = _.mapValues(_this.form, function () {
+          return null;
+        });
+        _this.errors = [];
         var obj = _this;
         setTimeout(function () {
           obj.success = false;
         }, 2000);
+        console.log(response);
       })["catch"](function (error) {
-        console.log(error.response.data.errors);
-        _this.errors = error.response.data.errors;
+        _this.errors = error;
       });
+    },
+    formValidation: function formValidation() {
+      if (this.form.authorName && this.form.age && this.form.bookTitle && this.form.date && this.form.address) {
+        this.validationErrors = _.mapValues(this.validationErrors, function () {
+          return null;
+        });
+      }
+
+      if (!this.form.authorName) {
+        this.validationErrors.authorName = 'Author name is required.';
+      } else {
+        if (!this.isNameValid(this.form.authorName)) {
+          this.validationErrors.authorName = 'Please enter a valid name';
+        } else {
+          this.validationErrors.authorName = null;
+        }
+      }
+
+      if (!this.form.address) {
+        this.validationErrors.address = 'Address is required.';
+      }
+
+      if (!this.form.age == null) {
+        this.validationErrors.age = 'Age is required.';
+      } else {
+        if (!this.isAgeValid(this.form.bookTitle)) {
+          this.validationErrors.age = 'Please enter a valid age';
+        } else {
+          this.validationErrors.age = null;
+        }
+      }
+
+      if (!this.form.bookTitle == null) {
+        this.validationErrors.bookTitle = 'Book title is required.';
+      } else {
+        if (!this.isNameValid(this.form.bookTitle)) {
+          this.validationErrors.bookTitle = 'Please enter a valid name';
+        } else {
+          this.validationErrors.bookTitle = null;
+        }
+      }
+
+      if (!this.form.date == null) {
+        this.validationErrors.date = 'Release date is required.';
+      }
+
+      console.log(this.validationErrors);
+    },
+    isNameValid: function isNameValid(str) {
+      var re = /^[A-Za-z ]+$/;
+      console.log(re.test(str));
+      return re.test(str);
+    },
+    isAgeValid: function isAgeValid() {
+      var re = /^\d{1,3}$/;
+      console.log(re.test(this.form.age));
+      return re.test(this.form.age);
     }
   }
 });
@@ -49153,12 +49231,21 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "my-5" }, [
-    _vm.errors
+    _vm.errors.response
+      ? _c(
+          "div",
+          { staticClass: "alert alert-danger" },
+          _vm._l(_vm.errors.response.data.errors, function(error) {
+            return _c("p", [_vm._v(_vm._s(error[0]))])
+          }),
+          0
+        )
+      : _vm.errors.length
       ? _c(
           "div",
           { staticClass: "alert alert-danger" },
           _vm._l(_vm.errors, function(error) {
-            return _c("p", [_vm._v(_vm._s(error[0]))])
+            return _c("p", [_vm._v(_vm._s(error))])
           }),
           0
         )
@@ -49175,6 +49262,7 @@ var render = function() {
       {
         attrs: { method: "post" },
         on: {
+          keyup: _vm.formValidation,
           submit: function($event) {
             $event.preventDefault()
             return _vm.createNewInput($event)
@@ -49195,10 +49283,11 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            class: { "is-invalid": _vm.validationErrors.bookTitle },
             attrs: {
               type: "text",
               id: "title",
-              placeholder: "Enter email",
+              placeholder: "Enter Book Title",
               name: "title"
             },
             domProps: { value: _vm.form.bookTitle },
@@ -49210,7 +49299,17 @@ var render = function() {
                 _vm.$set(_vm.form, "bookTitle", $event.target.value)
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.validationErrors.bookTitle
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.validationErrors.bookTitle) +
+                    "\n            "
+                )
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -49228,6 +49327,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            class: { "is-invalid": _vm.validationErrors.date },
             attrs: {
               type: "date",
               id: "release_date",
@@ -49243,7 +49343,17 @@ var render = function() {
                 _vm.$set(_vm.form, "date", $event.target.value)
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.validationErrors.date
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.validationErrors.date) +
+                    "\n            "
+                )
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -49259,6 +49369,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            class: { "is-invalid": _vm.validationErrors.authorName },
             attrs: {
               type: "text",
               id: "author",
@@ -49274,7 +49385,17 @@ var render = function() {
                 _vm.$set(_vm.form, "authorName", $event.target.value)
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.validationErrors.authorName
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.validationErrors.authorName) +
+                    "\n            "
+                )
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -49292,6 +49413,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            class: { "is-invalid": _vm.validationErrors.address },
             attrs: {
               type: "text",
               id: "address",
@@ -49307,7 +49429,17 @@ var render = function() {
                 _vm.$set(_vm.form, "address", $event.target.value)
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.validationErrors.address
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.validationErrors.address) +
+                    "\n            "
+                )
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -49323,6 +49455,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
+            class: { "is-invalid": _vm.validationErrors.age },
             attrs: {
               type: "text",
               id: "age",
@@ -49338,7 +49471,17 @@ var render = function() {
                 _vm.$set(_vm.form, "age", $event.target.value)
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.validationErrors.age
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.validationErrors.age) +
+                    "\n            "
+                )
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
