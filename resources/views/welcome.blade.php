@@ -11,9 +11,12 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-<div id="app" class="container my-5">
-    <form-component></form-component>
-    <books-component></books-component>
+<div id="app" class="fluid-container pt-5 mx-auto content-container">
+
+    <div class="d-flex flex-wrap">
+        <form-component></form-component>
+        <books-component></books-component>
+    </div>
 </div>
 <script src="{{ asset('js/app.js') }}"></script>
 </body>

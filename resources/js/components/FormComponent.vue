@@ -1,5 +1,6 @@
 <template>
-    <section class="my-5">
+    <section class="col-lg-6 col-sm-8 mb-3">
+        <h1 class="mb-3">Create New Book</h1>
         <div v-if="errors.response" class="alert alert-danger">
             <p v-for="error in errors.response.data.errors">{{error[0]}}</p>
         </div>
@@ -12,7 +13,9 @@
         <form method="post" @keyup="formValidation" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle}"  class="form-control" id="title" placeholder="Enter Book Title" name="title"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle}"
+                       class="form-control form-control-sm"
+                       id="title" placeholder="Enter Book Title" name="title"
                        v-model="form.bookTitle">
                 <div v-if=" validationErrors.bookTitle" class="invalid-feedback">
                     {{ validationErrors.bookTitle}}
@@ -20,7 +23,9 @@
             </div>
             <div class="form-group">
                 <label for="release_date">Release Date</label>
-                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date}" class="form-control" id="release_date" placeholder="Enter email" name="date"
+                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date}"
+                       class="form-control form-control-sm"
+                       id="release_date" placeholder="Enter email" name="date"
                        v-model="form.date">
                 <div v-if=" validationErrors.date" class="invalid-feedback">
                     {{ validationErrors.date}}
@@ -28,7 +33,9 @@
             </div>
             <div class="form-group">
                 <label for="author">Author Name</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.authorName}" class="form-control" id="author" placeholder="Enter Author Name" name="name"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.authorName}"
+                       class="form-control form-control-sm"
+                       id="author" placeholder="Enter Author Name" name="name"
                        v-model="form.authorName">
                 <div v-if=" validationErrors.authorName" class="invalid-feedback">
                     {{ validationErrors.authorName }}
@@ -36,7 +43,9 @@
             </div>
             <div class="form-group">
                 <label for="address">Author Address</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address}" class="form-control" id="address" placeholder="Enter Author Address" name="address"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address}"
+                       class="form-control form-control-sm"
+                       id="address" placeholder="Enter Author Address" name="address"
                        v-model="form.address">
                 <div v-if=" validationErrors.address" class="invalid-feedback">
                     {{ validationErrors.address}}
@@ -44,7 +53,9 @@
             </div>
             <div class="form-group">
                 <label for="age">Author Age</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.age}" class="form-control" id="age" placeholder="Enter Author Age" name="age"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.age}"
+                       class="form-control form-control-sm" id="age"
+                       placeholder="Enter Author Age" name="age"
                        v-model="form.age">
                 <div v-if=" validationErrors.age" class="invalid-feedback">
                     {{ validationErrors.age}}
@@ -80,6 +91,7 @@
             }
         },
         methods: {
+
             createNewInput() {
                 axios.post('/api/create', this.form)
                     .then((response) => {
@@ -104,29 +116,31 @@
 
                 if (!this.form.authorName) {
                     this.validationErrors.authorName = 'Author name is required.';
-                }else{ if(!this.isNameValid(this.form.authorName)){
-                    this.validationErrors.authorName = 'Please enter a valid name';
-                }else{
-                    this.validationErrors.authorName = null;
-                }}
+                } else {
+                    if (!this.isNameValid(this.form.authorName)) {
+                        this.validationErrors.authorName = 'Please enter a valid name';
+                    } else {
+                        this.validationErrors.authorName = null;
+                    }
+                }
                 if (!this.form.address) {
                     this.validationErrors.address = 'Address is required.';
                 }
                 if (!this.form.age == null) {
                     this.validationErrors.age = 'Age is required.';
-                }else{
-                    if(!this.isAgeValid(this.form.bookTitle)){
+                } else {
+                    if (!this.isAgeValid(this.form.bookTitle)) {
                         this.validationErrors.age = 'Please enter a valid age';
-                    }else{
+                    } else {
                         this.validationErrors.age = null;
                     }
                 }
                 if (!this.form.bookTitle == null) {
                     this.validationErrors.bookTitle = 'Book title is required.';
-                }else{
-                    if(!this.isNameValid(this.form.bookTitle)){
+                } else {
+                    if (!this.isNameValid(this.form.bookTitle)) {
                         this.validationErrors.bookTitle = 'Please enter a valid name';
-                    }else{
+                    } else {
                         this.validationErrors.bookTitle = null;
                     }
 
@@ -134,13 +148,6 @@
                 if (!this.form.date == null) {
                     this.validationErrors.date = 'Release date is required.';
                 }
-
-
-
-
-
-                console.log(this.validationErrors)
-
             },
 
             isNameValid(str) {

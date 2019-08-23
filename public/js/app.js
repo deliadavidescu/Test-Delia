@@ -2719,6 +2719,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2805,8 +2816,6 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.form.date == null) {
         this.validationErrors.date = 'Release date is required.';
       }
-
-      console.log(this.validationErrors);
     },
     isNameValid: function isNameValid(str) {
       var re = /^[A-Za-z ]+$/;
@@ -49143,11 +49152,11 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", [
+  return _c("section", { staticClass: "col-lg-5 col-sm-12 offset-md-1 " }, [
     _c(
       "button",
       {
-        staticClass: "btn btn-primary",
+        staticClass: "btn btn-primary mx-auto mb-3",
         on: {
           click: function($event) {
             _vm.showBooks = !_vm.showBooks
@@ -49167,7 +49176,8 @@ var render = function() {
             value: _vm.showBooks,
             expression: "showBooks"
           }
-        ]
+        ],
+        staticClass: "books-container"
       },
       _vm._l(_vm.Books, function(index) {
         return _c(
@@ -49230,7 +49240,9 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", { staticClass: "my-5" }, [
+  return _c("section", { staticClass: "col-lg-6 col-sm-8 mb-3" }, [
+    _c("h1", { staticClass: "mb-3" }, [_vm._v("Create New Book")]),
+    _vm._v(" "),
     _vm.errors.response
       ? _c(
           "div",
@@ -49282,7 +49294,7 @@ var render = function() {
                 expression: "form.bookTitle"
               }
             ],
-            staticClass: "form-control",
+            staticClass: "form-control form-control-sm",
             class: { "is-invalid": _vm.validationErrors.bookTitle },
             attrs: {
               type: "text",
@@ -49326,7 +49338,7 @@ var render = function() {
                 expression: "form.date"
               }
             ],
-            staticClass: "form-control",
+            staticClass: "form-control form-control-sm",
             class: { "is-invalid": _vm.validationErrors.date },
             attrs: {
               type: "date",
@@ -49368,7 +49380,7 @@ var render = function() {
                 expression: "form.authorName"
               }
             ],
-            staticClass: "form-control",
+            staticClass: "form-control form-control-sm",
             class: { "is-invalid": _vm.validationErrors.authorName },
             attrs: {
               type: "text",
@@ -49412,7 +49424,7 @@ var render = function() {
                 expression: "form.address"
               }
             ],
-            staticClass: "form-control",
+            staticClass: "form-control form-control-sm",
             class: { "is-invalid": _vm.validationErrors.address },
             attrs: {
               type: "text",
@@ -49454,7 +49466,7 @@ var render = function() {
                 expression: "form.age"
               }
             ],
-            staticClass: "form-control",
+            staticClass: "form-control form-control-sm",
             class: { "is-invalid": _vm.validationErrors.age },
             attrs: {
               type: "text",

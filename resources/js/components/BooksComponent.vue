@@ -1,7 +1,7 @@
 <template>
-    <section>
-        <button class="btn btn-primary" @click="showBooks = !showBooks">Show all books</button>
-        <div v-show="showBooks">
+    <section class="col-lg-5 col-sm-12 offset-md-1 ">
+        <button class="btn btn-primary mx-auto mb-3" @click="showBooks = !showBooks">Show all books</button>
+        <div class="books-container" v-show="showBooks">
             <div v-for="index in Books">
                 <div v-for="book in index">
                     <div class="card my-5">

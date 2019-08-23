@@ -7,7 +7,7 @@ use App\Author;
 use App\Http\Resources\BooksResource;
 use Illuminate\Http\Request;
 
-class BooksController extends Controller {
+class ApiController extends Controller {
 
     /**
      * Display a listing of the resource.
