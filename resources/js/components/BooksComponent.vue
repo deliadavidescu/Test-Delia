@@ -30,11 +30,11 @@
             }
         },
         mounted() {
-            this.$store.dispatch('loadData')
+            this.$store.dispatch('loadData');
         },
         computed: {
             Books() {
-                return this.$store.getters.Books
+                return this.$store.getters.Books;
             }
         }
     }

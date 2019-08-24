@@ -2743,6 +2743,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2799,6 +2800,7 @@ __webpack_require__.r(__webpack_exports__);
           setTimeout(function () {
             obj.success = false;
           }, 3000);
+          console.log(response);
         })["catch"](function (error) {
           _this.serverErrors = error.response.data.errors;
         });
@@ -2834,27 +2836,13 @@ __webpack_require__.r(__webpack_exports__);
       var str = event.target.name;
       var obj = this.form;
       var errors = this.validationErrors;
-      console.log(obj[str]);
-
-      if (!this.isNameValid(obj[str])) {
-        errors[str] = 'Please enter only letters';
-      } else {
-        errors[str] = null;
-      }
+      errors[str] = !this.isNameValid(obj[str]) ? "Please enter only letters" : null;
     },
     wrongAge: function wrongAge() {
-      if (!this.isAgeValid()) {
-        this.validationErrors.age = 'Please enter a valid age';
-      } else {
-        this.validationErrors.age = null;
-      }
+      this.validationErrors.age = !this.isAgeValid() ? "Please enter a valid age" : null;
     },
     wrongAddress: function wrongAddress() {
-      if (!this.validateAlfaNoumeric(this.form.address)) {
-        this.validationErrors.address = 'Please enter only numbers and letters';
-      } else {
-        this.validationErrors.address = null;
-      }
+      this.validationErrors.address = !this.validateAlfaNoumeric(this.form.address) ? 'Please enter only numbers and letters' : null;
     }
   }
 });
@@ -49271,7 +49259,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "mb-3" }, [
     _vm.success
-      ? _c("div", { staticClass: "alert alert-success" }, [
+      ? _c("div", { staticClass: "alert alert-success success-msg" }, [
           _c("p", [_vm._v("Your form was sucessfully submitted.")])
         ])
       : _vm._e(),

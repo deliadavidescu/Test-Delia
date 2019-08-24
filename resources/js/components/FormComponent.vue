@@ -1,6 +1,6 @@
 <template>
     <section class="mb-3">
-        <div v-if="success" class="alert alert-success">
+        <div v-if="success" class="alert alert-success success-msg">
             <p>Your form was sucessfully submitted.</p>
         </div>
         <form class="form" @click="clearServerErrors()" method="post" @submit.prevent="createNewInput">
@@ -48,7 +48,8 @@
             </div>
             <div class="form-group">
                 <label for="address">Author Address</label>
-                <input @input="wrongAddress()" type="text" v-bind:class="{'is-invalid' : validationErrors.address || serverErrors.address}"
+                <input @input="wrongAddress()" type="text"
+                       v-bind:class="{'is-invalid' : validationErrors.address || serverErrors.address}"
                        class="form-control form-control-sm"
                        id="address" placeholder="Enter Author Address" name="address"
                        v-model="form.address">
@@ -114,7 +115,7 @@
         methods: {
             createNewInput() {
                 let token = document.head.querySelector('meta[name="csrf-token"]');
-                var headers = {
+                const headers = {
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': token.content
                 };
@@ -125,11 +126,12 @@
                             this.$store.dispatch('loadData');
                             this.form = _.mapValues(this.form, () => null);
                             this.serverErrors = _.mapValues(this.serverErrors, () => null);
-                            var obj = this;
-                            this.success=true;
+                            let obj = this;
+                            this.success = true;
                             setTimeout(function () {
                                 obj.success = false;
                             }, 3000);
+                            console.log(response);
 
                         }).catch((error) => {
                         this.serverErrors = error.response.data.errors;
@@ -137,9 +139,11 @@
                 }
 
             },
-            clearServerErrors(){
+
+            clearServerErrors() {
                 this.serverErrors = _.mapValues(this.serverErrors, () => null);
             },
+
             isNameValid(str) {
                 let re = /^[A-Za-z ]+$/;
                 return re.test(str);
@@ -151,7 +155,7 @@
 
             },
 
-            validateAlfaNoumeric(field){
+            validateAlfaNoumeric(field) {
                 let re = /^[a-z A-Z 0-9 / -]+$/;
                 return re.test(field);
             },
@@ -163,32 +167,18 @@
             },
 
             wrongName(event) {
-                var str = event.target.name;
-                var obj = this.form;
-                var errors = this.validationErrors;
-                console.log(obj[str])
-
-                if (!this.isNameValid(obj[str])) {
-                    errors[str] = 'Please enter only letters';
-                } else {
-                    errors[str] = null;
-                }
+                let str = event.target.name;
+                let obj = this.form;
+                let errors = this.validationErrors;
+                errors[str] = (!this.isNameValid(obj[str])) ? "Please enter only letters" : null;
             },
 
             wrongAge() {
-                if (!this.isAgeValid()) {
-                    this.validationErrors.age = 'Please enter a valid age';
-                } else {
-                    this.validationErrors.age = null;
-                }
-
+                this.validationErrors.age = (!this.isAgeValid()) ? "Please enter a valid age" : null;
             },
-            wrongAddress(){
-                if (!this.validateAlfaNoumeric(this.form.address)) {
-                    this.validationErrors.address = 'Please enter only numbers and letters';
-                } else {
-                    this.validationErrors.address = null;
-                }
+
+            wrongAddress() {
+                this.validationErrors.address = (!this.validateAlfaNoumeric(this.form.address)) ? 'Please enter only numbers and letters' : null;
             }
         }
     }
