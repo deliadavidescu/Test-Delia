@@ -1,74 +1,76 @@
 <template>
-    <section class="mb-3" >
+    <section class="mb-3">
         <div v-if="success" class="alert alert-success">
             <p>Your form was sucessfully submitted.</p>
         </div>
         <form class="form" method="post" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
-                <input @input="wrongName($event)" type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle || errors.bookTitle}"
+                <input @input="wrongName($event)" type="text"
+                       v-bind:class="{'is-invalid' : validationErrors.bookTitle || serverErrors.bookTitle }"
                        class="form-control form-control-sm"
                        id="title" placeholder="Enter Book Title" name="bookTitle"
-                       v-model="form.bookTitle" >
+                       v-model="form.bookTitle">
                 <div v-if=" validationErrors.bookTitle" class="invalid-feedback">
                     {{ validationErrors.bookTitle}}
                 </div>
-                <div v-else-if="errors.bookTitle" class="invalid-feedback">
-                    {{errors.bookTitle[0]}}
+                <div v-else-if="serverErrors.bookTitle" class="invalid-feedback">
+                    {{serverErrors.bookTitle[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="release_date">Release Date</label>
-                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date || errors.date}"
+                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date || serverErrors.date}"
                        class="form-control form-control-sm"
                        id="release_date" placeholder="Enter email" name="date"
-                       v-model="form.date" >
+                       v-model="form.date">
                 <div v-if=" validationErrors.date" class="invalid-feedback">
                     {{ validationErrors.date}}
                 </div>
-                <div v-else-if="errors.date" class="invalid-feedback">
-                    {{errors.date[0]}}
+                <div v-else-if="serverErrors.date" class="invalid-feedback">
+                    {{serverErrors.date[0]}}
                 </div>
 
             </div>
             <div class="form-group">
                 <label for="author">Author Name</label>
                 <input type="text" @input="wrongName($event)"
-                       v-bind:class="{'is-invalid' : validationErrors.authorName || errors.authorName}"
+                       v-bind:class="{'is-invalid' : validationErrors.authorName || serverErrors.authorName}"
                        class="form-control form-control-sm"
                        id="author" placeholder="Enter Author Name" name="authorName"
-                       v-model="form.authorName" >
+                       v-model="form.authorName">
                 <div v-if=" validationErrors.authorName" class="invalid-feedback">
                     {{ validationErrors.authorName }}
                 </div>
-                <div v-else-if="errors.authorName" class="invalid-feedback">
-                    {{errors.authorName[0]}}
+                <div v-else-if="serverErrors.authorName" class="invalid-feedback">
+                    {{serverErrors.authorName[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="address">Author Address</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address || errors.address}"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address || serverErrors.address}"
                        class="form-control form-control-sm"
                        id="address" placeholder="Enter Author Address" name="address"
-                       v-model="form.address" >
+                       v-model="form.address">
                 <div v-if=" validationErrors.address" class="invalid-feedback">
                     {{ validationErrors.address}}
                 </div>
-                <div v-else-if="errors.address" class="invalid-feedback">
-                    {{errors.address[0]}}
+                <div v-else-if="serverErrors.address" class="invalid-feedback">
+                    {{serverErrors.address[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="age">Author Age</label>
-                <input @input="wrongAge()" type="text" v-bind:class="{'is-invalid' : validationErrors.age || errors.age}"
+                <input @input="wrongAge()" type="text"
+                       v-bind:class="{'is-invalid' : validationErrors.age || serverErrors.age}"
                        class="form-control form-control-sm" id="age"
                        placeholder="Enter Author Age" name="age"
-                       v-model="form.age" >
+                       v-model="form.age">
                 <div v-if="validationErrors.age" class="invalid-feedback">
                     {{ validationErrors.age}}
                 </div>
-                <div v-else-if="errors.age" class="invalid-feedback">
-                   {{errors.age[0]}}
+                <div v-else-if="serverErrors.age" class="invalid-feedback">
+                    {{serverErrors.age[0]}}
                 </div>
 
             </div>
@@ -97,7 +99,7 @@
                     age: null,
                     date: null
                 },
-                errors: {
+                serverErrors: {
                     authorName: null,
                     bookTitle: null,
                     address: null,
@@ -109,7 +111,6 @@
 
             }
         },
-        props:["server_errors"],
         methods: {
 
             createNewInput() {
@@ -124,17 +125,15 @@
                         .then((response) => {
                             this.$store.dispatch('loadData');
                             this.form = _.mapValues(this.form, () => null);
-                            this.errors = [];
+                            this.serverErrors = _.mapValues(this.serverErrors, () => null);
                             var obj = this;
+                            this.success=true;
                             setTimeout(function () {
                                 obj.success = false;
-                            }, 2000);
-                            console.log(response);
+                            }, 3000);
 
                         }).catch((error) => {
-                        this.errors = error.response.data.errors;
-                        console.log(this.errors)
-
+                        this.serverErrors = error.response.data.errors;
                     });
                 }
 

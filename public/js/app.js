@@ -2741,6 +2741,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2759,7 +2761,7 @@ __webpack_require__.r(__webpack_exports__);
         age: null,
         date: null
       },
-      errors: {
+      serverErrors: {
         authorName: null,
         bookTitle: null,
         address: null,
@@ -2770,7 +2772,6 @@ __webpack_require__.r(__webpack_exports__);
       focus: false
     };
   },
-  props: ["server_errors"],
   methods: {
     createNewInput: function createNewInput() {
       var _this = this;
@@ -2790,15 +2791,16 @@ __webpack_require__.r(__webpack_exports__);
           _this.form = _.mapValues(_this.form, function () {
             return null;
           });
-          _this.errors = [];
+          _this.serverErrors = _.mapValues(_this.serverErrors, function () {
+            return null;
+          });
           var obj = _this;
+          _this.success = true;
           setTimeout(function () {
             obj.success = false;
-          }, 2000);
-          console.log(response);
+          }, 3000);
         })["catch"](function (error) {
-          _this.errors = error.response.data.errors;
-          console.log(_this.errors);
+          _this.serverErrors = error.response.data.errors;
         });
       }
     },
@@ -49286,7 +49288,7 @@ var render = function() {
             staticClass: "form-control form-control-sm",
             class: {
               "is-invalid":
-                _vm.validationErrors.bookTitle || _vm.errors.bookTitle
+                _vm.validationErrors.bookTitle || _vm.serverErrors.bookTitle
             },
             attrs: {
               type: "text",
@@ -49318,11 +49320,11 @@ var render = function() {
                     "\n            "
                 )
               ])
-            : _vm.errors.bookTitle
+            : _vm.serverErrors.bookTitle
             ? _c("div", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                " +
-                    _vm._s(_vm.errors.bookTitle[0]) +
+                    _vm._s(_vm.serverErrors.bookTitle[0]) +
                     "\n            "
                 )
               ])
@@ -49345,7 +49347,7 @@ var render = function() {
             ],
             staticClass: "form-control form-control-sm",
             class: {
-              "is-invalid": _vm.validationErrors.date || _vm.errors.date
+              "is-invalid": _vm.validationErrors.date || _vm.serverErrors.date
             },
             attrs: {
               type: "date",
@@ -49372,11 +49374,11 @@ var render = function() {
                     "\n            "
                 )
               ])
-            : _vm.errors.date
+            : _vm.serverErrors.date
             ? _c("div", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                " +
-                    _vm._s(_vm.errors.date[0]) +
+                    _vm._s(_vm.serverErrors.date[0]) +
                     "\n            "
                 )
               ])
@@ -49398,7 +49400,7 @@ var render = function() {
             staticClass: "form-control form-control-sm",
             class: {
               "is-invalid":
-                _vm.validationErrors.authorName || _vm.errors.authorName
+                _vm.validationErrors.authorName || _vm.serverErrors.authorName
             },
             attrs: {
               type: "text",
@@ -49430,11 +49432,11 @@ var render = function() {
                     "\n            "
                 )
               ])
-            : _vm.errors.authorName
+            : _vm.serverErrors.authorName
             ? _c("div", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                " +
-                    _vm._s(_vm.errors.authorName[0]) +
+                    _vm._s(_vm.serverErrors.authorName[0]) +
                     "\n            "
                 )
               ])
@@ -49457,7 +49459,8 @@ var render = function() {
             ],
             staticClass: "form-control form-control-sm",
             class: {
-              "is-invalid": _vm.validationErrors.address || _vm.errors.address
+              "is-invalid":
+                _vm.validationErrors.address || _vm.serverErrors.address
             },
             attrs: {
               type: "text",
@@ -49484,11 +49487,11 @@ var render = function() {
                     "\n            "
                 )
               ])
-            : _vm.errors.address
+            : _vm.serverErrors.address
             ? _c("div", { staticClass: "invalid-feedback" }, [
                 _vm._v(
                   "\n                " +
-                    _vm._s(_vm.errors.address[0]) +
+                    _vm._s(_vm.serverErrors.address[0]) +
                     "\n            "
                 )
               ])
@@ -49508,7 +49511,9 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.age || _vm.errors.age },
+            class: {
+              "is-invalid": _vm.validationErrors.age || _vm.serverErrors.age
+            },
             attrs: {
               type: "text",
               id: "age",
@@ -49539,11 +49544,11 @@ var render = function() {
                     "\n            "
                 )
               ])
-            : _vm.errors.age
+            : _vm.serverErrors.age
             ? _c("div", { staticClass: "invalid-feedback" }, [
                 _vm._v(
-                  "\n               " +
-                    _vm._s(_vm.errors.age[0]) +
+                  "\n                " +
+                    _vm._s(_vm.serverErrors.age[0]) +
                     "\n            "
                 )
               ])
