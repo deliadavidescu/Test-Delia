@@ -2730,6 +2730,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2748,11 +2759,18 @@ __webpack_require__.r(__webpack_exports__);
         age: null,
         date: null
       },
-      errors: [],
+      errors: {
+        authorName: null,
+        bookTitle: null,
+        address: null,
+        age: null,
+        date: null
+      },
       success: false,
       focus: false
     };
   },
+  props: ["server_errors"],
   methods: {
     createNewInput: function createNewInput() {
       var _this = this;
@@ -2779,7 +2797,8 @@ __webpack_require__.r(__webpack_exports__);
           }, 2000);
           console.log(response);
         })["catch"](function (error) {
-          _this.errors = error;
+          _this.errors = error.response.data.errors;
+          console.log(_this.errors);
         });
       }
     },
@@ -49233,26 +49252,6 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "mb-3" }, [
-    _vm.errors.response
-      ? _c(
-          "div",
-          { staticClass: "alert alert-danger" },
-          _vm._l(_vm.errors.response.data.errors, function(error) {
-            return _c("p", [_vm._v(_vm._s(error[0]))])
-          }),
-          0
-        )
-      : _vm.errors.length
-      ? _c(
-          "div",
-          { staticClass: "alert alert-danger" },
-          _vm._l(_vm.errors, function(error) {
-            return _c("p", [_vm._v(_vm._s(error))])
-          }),
-          0
-        )
-      : _vm._e(),
-    _vm._v(" "),
     _vm.success
       ? _c("div", { staticClass: "alert alert-success" }, [
           _c("p", [_vm._v("Your form was sucessfully submitted.")])
@@ -49285,13 +49284,15 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.bookTitle },
+            class: {
+              "is-invalid":
+                _vm.validationErrors.bookTitle || _vm.errors.bookTitle
+            },
             attrs: {
               type: "text",
               id: "title",
               placeholder: "Enter Book Title",
-              name: "bookTitle",
-              required: ""
+              name: "bookTitle"
             },
             domProps: { value: _vm.form.bookTitle },
             on: {
@@ -49317,6 +49318,14 @@ var render = function() {
                     "\n            "
                 )
               ])
+            : _vm.errors.bookTitle
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.errors.bookTitle[0]) +
+                    "\n            "
+                )
+              ])
             : _vm._e()
         ]),
         _vm._v(" "),
@@ -49335,13 +49344,14 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.date },
+            class: {
+              "is-invalid": _vm.validationErrors.date || _vm.errors.date
+            },
             attrs: {
               type: "date",
               id: "release_date",
               placeholder: "Enter email",
-              name: "date",
-              required: ""
+              name: "date"
             },
             domProps: { value: _vm.form.date },
             on: {
@@ -49362,6 +49372,14 @@ var render = function() {
                     "\n            "
                 )
               ])
+            : _vm.errors.date
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.errors.date[0]) +
+                    "\n            "
+                )
+              ])
             : _vm._e()
         ]),
         _vm._v(" "),
@@ -49378,13 +49396,15 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.authorName },
+            class: {
+              "is-invalid":
+                _vm.validationErrors.authorName || _vm.errors.authorName
+            },
             attrs: {
               type: "text",
               id: "author",
               placeholder: "Enter Author Name",
-              name: "authorName",
-              required: ""
+              name: "authorName"
             },
             domProps: { value: _vm.form.authorName },
             on: {
@@ -49410,6 +49430,14 @@ var render = function() {
                     "\n            "
                 )
               ])
+            : _vm.errors.authorName
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.errors.authorName[0]) +
+                    "\n            "
+                )
+              ])
             : _vm._e()
         ]),
         _vm._v(" "),
@@ -49428,13 +49456,14 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.address },
+            class: {
+              "is-invalid": _vm.validationErrors.address || _vm.errors.address
+            },
             attrs: {
               type: "text",
               id: "address",
               placeholder: "Enter Author Address",
-              name: "address",
-              required: ""
+              name: "address"
             },
             domProps: { value: _vm.form.address },
             on: {
@@ -49455,6 +49484,14 @@ var render = function() {
                     "\n            "
                 )
               ])
+            : _vm.errors.address
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n                " +
+                    _vm._s(_vm.errors.address[0]) +
+                    "\n            "
+                )
+              ])
             : _vm._e()
         ]),
         _vm._v(" "),
@@ -49471,13 +49508,12 @@ var render = function() {
               }
             ],
             staticClass: "form-control form-control-sm",
-            class: { "is-invalid": _vm.validationErrors.age },
+            class: { "is-invalid": _vm.validationErrors.age || _vm.errors.age },
             attrs: {
               type: "text",
               id: "age",
               placeholder: "Enter Author Age",
-              name: "age",
-              required: ""
+              name: "age"
             },
             domProps: { value: _vm.form.age },
             on: {
@@ -49500,6 +49536,14 @@ var render = function() {
                 _vm._v(
                   "\n                " +
                     _vm._s(_vm.validationErrors.age) +
+                    "\n            "
+                )
+              ])
+            : _vm.errors.age
+            ? _c("div", { staticClass: "invalid-feedback" }, [
+                _vm._v(
+                  "\n               " +
+                    _vm._s(_vm.errors.age[0]) +
                     "\n            "
                 )
               ])

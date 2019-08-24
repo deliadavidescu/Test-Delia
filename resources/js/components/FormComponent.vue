@@ -1,65 +1,76 @@
 <template>
-    <section class="mb-3">
-        <div v-if="errors.response" class="alert alert-danger">
-            <p v-for="error in errors.response.data.errors">{{error[0]}}</p>
-        </div>
-        <div v-else-if="errors.length" class="alert alert-danger">
-            <p v-for="error in errors">{{error}}</p>
-        </div>
+    <section class="mb-3" >
         <div v-if="success" class="alert alert-success">
             <p>Your form was sucessfully submitted.</p>
         </div>
         <form class="form" method="post" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
-                <input @input="wrongName($event)" type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle}"
+                <input @input="wrongName($event)" type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle || errors.bookTitle}"
                        class="form-control form-control-sm"
                        id="title" placeholder="Enter Book Title" name="bookTitle"
-                       v-model="form.bookTitle" required>
+                       v-model="form.bookTitle" >
                 <div v-if=" validationErrors.bookTitle" class="invalid-feedback">
                     {{ validationErrors.bookTitle}}
+                </div>
+                <div v-else-if="errors.bookTitle" class="invalid-feedback">
+                    {{errors.bookTitle[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="release_date">Release Date</label>
-                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date}"
+                <input type="date" v-bind:class="{'is-invalid' : validationErrors.date || errors.date}"
                        class="form-control form-control-sm"
                        id="release_date" placeholder="Enter email" name="date"
-                       v-model="form.date" required>
+                       v-model="form.date" >
                 <div v-if=" validationErrors.date" class="invalid-feedback">
                     {{ validationErrors.date}}
                 </div>
+                <div v-else-if="errors.date" class="invalid-feedback">
+                    {{errors.date[0]}}
+                </div>
+
             </div>
             <div class="form-group">
                 <label for="author">Author Name</label>
                 <input type="text" @input="wrongName($event)"
-                       v-bind:class="{'is-invalid' : validationErrors.authorName}"
+                       v-bind:class="{'is-invalid' : validationErrors.authorName || errors.authorName}"
                        class="form-control form-control-sm"
                        id="author" placeholder="Enter Author Name" name="authorName"
-                       v-model="form.authorName" required>
+                       v-model="form.authorName" >
                 <div v-if=" validationErrors.authorName" class="invalid-feedback">
                     {{ validationErrors.authorName }}
+                </div>
+                <div v-else-if="errors.authorName" class="invalid-feedback">
+                    {{errors.authorName[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="address">Author Address</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address}"
+                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address || errors.address}"
                        class="form-control form-control-sm"
                        id="address" placeholder="Enter Author Address" name="address"
-                       v-model="form.address" required>
+                       v-model="form.address" >
                 <div v-if=" validationErrors.address" class="invalid-feedback">
                     {{ validationErrors.address}}
+                </div>
+                <div v-else-if="errors.address" class="invalid-feedback">
+                    {{errors.address[0]}}
                 </div>
             </div>
             <div class="form-group">
                 <label for="age">Author Age</label>
-                <input @input="wrongAge()" type="text" v-bind:class="{'is-invalid' : validationErrors.age}"
+                <input @input="wrongAge()" type="text" v-bind:class="{'is-invalid' : validationErrors.age || errors.age}"
                        class="form-control form-control-sm" id="age"
                        placeholder="Enter Author Age" name="age"
-                       v-model="form.age" required>
+                       v-model="form.age" >
                 <div v-if="validationErrors.age" class="invalid-feedback">
                     {{ validationErrors.age}}
                 </div>
+                <div v-else-if="errors.age" class="invalid-feedback">
+                   {{errors.age[0]}}
+                </div>
+
             </div>
             <button type="submit" class="btn btn-success">Submit</button>
         </form>
@@ -86,12 +97,19 @@
                     age: null,
                     date: null
                 },
-                errors: [],
+                errors: {
+                    authorName: null,
+                    bookTitle: null,
+                    address: null,
+                    age: null,
+                    date: null
+                },
                 success: false,
                 focus: false
 
             }
         },
+        props:["server_errors"],
         methods: {
 
             createNewInput() {
@@ -114,9 +132,12 @@
                             console.log(response);
 
                         }).catch((error) => {
-                        this.errors = error;
+                        this.errors = error.response.data.errors;
+                        console.log(this.errors)
+
                     });
                 }
+
             },
 
             isNameValid(str) {
