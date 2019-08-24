@@ -3,7 +3,7 @@
         <div v-if="success" class="alert alert-success">
             <p>Your form was sucessfully submitted.</p>
         </div>
-        <form class="form" method="post" @submit.prevent="createNewInput">
+        <form class="form" @click="clearServerErrors()" method="post" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
                 <input @input="wrongName($event)" type="text"
@@ -48,7 +48,7 @@
             </div>
             <div class="form-group">
                 <label for="address">Author Address</label>
-                <input type="text" v-bind:class="{'is-invalid' : validationErrors.address || serverErrors.address}"
+                <input @input="wrongAddress()" type="text" v-bind:class="{'is-invalid' : validationErrors.address || serverErrors.address}"
                        class="form-control form-control-sm"
                        id="address" placeholder="Enter Author Address" name="address"
                        v-model="form.address">
@@ -112,7 +112,6 @@
             }
         },
         methods: {
-
             createNewInput() {
                 let token = document.head.querySelector('meta[name="csrf-token"]');
                 var headers = {
@@ -138,7 +137,9 @@
                 }
 
             },
-
+            clearServerErrors(){
+                this.serverErrors = _.mapValues(this.serverErrors, () => null);
+            },
             isNameValid(str) {
                 let re = /^[A-Za-z ]+$/;
                 return re.test(str);
@@ -148,6 +149,11 @@
                 let re = /^\d{1,3}$/;
                 return re.test(this.form.age)
 
+            },
+
+            validateAlfaNoumeric(field){
+                let re = /^[a-z A-Z 0-9 / -]+$/;
+                return re.test(field);
             },
 
             checkErrors() {
@@ -170,7 +176,6 @@
             },
 
             wrongAge() {
-
                 if (!this.isAgeValid()) {
                     this.validationErrors.age = 'Please enter a valid age';
                 } else {
@@ -178,6 +183,13 @@
                 }
 
             },
+            wrongAddress(){
+                if (!this.validateAlfaNoumeric(this.form.address)) {
+                    this.validationErrors.address = 'Please enter only numbers and letters';
+                } else {
+                    this.validationErrors.address = null;
+                }
+            }
         }
     }
 

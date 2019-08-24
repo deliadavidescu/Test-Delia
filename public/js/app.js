@@ -2804,6 +2804,11 @@ __webpack_require__.r(__webpack_exports__);
         });
       }
     },
+    clearServerErrors: function clearServerErrors() {
+      this.serverErrors = _.mapValues(this.serverErrors, function () {
+        return null;
+      });
+    },
     isNameValid: function isNameValid(str) {
       var re = /^[A-Za-z ]+$/;
       return re.test(str);
@@ -2811,6 +2816,10 @@ __webpack_require__.r(__webpack_exports__);
     isAgeValid: function isAgeValid() {
       var re = /^\d{1,3}$/;
       return re.test(this.form.age);
+    },
+    validateAlfaNoumeric: function validateAlfaNoumeric(field) {
+      var re = /^[a-z A-Z 0-9 / -]+$/;
+      return re.test(field);
     },
     checkErrors: function checkErrors() {
       var values = Object.values(this.validationErrors);
@@ -2838,6 +2847,13 @@ __webpack_require__.r(__webpack_exports__);
         this.validationErrors.age = 'Please enter a valid age';
       } else {
         this.validationErrors.age = null;
+      }
+    },
+    wrongAddress: function wrongAddress() {
+      if (!this.validateAlfaNoumeric(this.form.address)) {
+        this.validationErrors.address = 'Please enter only numbers and letters';
+      } else {
+        this.validationErrors.address = null;
       }
     }
   }
@@ -49266,6 +49282,9 @@ var render = function() {
         staticClass: "form",
         attrs: { method: "post" },
         on: {
+          click: function($event) {
+            return _vm.clearServerErrors()
+          },
           submit: function($event) {
             $event.preventDefault()
             return _vm.createNewInput($event)
@@ -49470,12 +49489,17 @@ var render = function() {
             },
             domProps: { value: _vm.form.address },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "address", $event.target.value)
+                },
+                function($event) {
+                  return _vm.wrongAddress()
                 }
-                _vm.$set(_vm.form, "address", $event.target.value)
-              }
+              ]
             }
           }),
           _vm._v(" "),
