@@ -1,5 +1,5 @@
 <template>
-    <section class="col-lg-5 col-sm-12 offset-md-1 ">
+    <section>
         <button class="btn btn-primary mx-auto mb-3" @click="showBooks = !showBooks">Show all books</button>
         <div class="books-container" v-show="showBooks">
             <div v-for="index in Books">
@@ -11,7 +11,7 @@
                         </div>
                         <ul class="list-group list-group-flush">
                             <li class="list-group-item">Release date: {{book.release_date}}</li>
-                            <li class="list-group-item">Authore address: {{book.author.address}}</li>
+                            <li class="list-group-item">Author address: {{book.author.address}}</li>
                             <li class="list-group-item">Author Age: {{book.author.age}} years</li>
                         </ul>
 

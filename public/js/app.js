@@ -2729,7 +2729,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2756,21 +2755,25 @@ __webpack_require__.r(__webpack_exports__);
     createNewInput: function createNewInput() {
       var _this = this;
 
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
-        _this.$store.dispatch('loadData');
+      console.log(this.checkErrors());
 
-        _this.form = _.mapValues(_this.form, function () {
-          return null;
+      if (this.checkErrors()) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
+          _this.$store.dispatch('loadData');
+
+          _this.form = _.mapValues(_this.form, function () {
+            return null;
+          });
+          _this.errors = [];
+          var obj = _this;
+          setTimeout(function () {
+            obj.success = false;
+          }, 2000);
+          console.log(response);
+        })["catch"](function (error) {
+          _this.errors = error;
         });
-        _this.errors = [];
-        var obj = _this;
-        setTimeout(function () {
-          obj.success = false;
-        }, 2000);
-        console.log(response);
-      })["catch"](function (error) {
-        _this.errors = error;
-      });
+      }
     },
     formValidation: function formValidation() {
       if (this.form.authorName && this.form.age && this.form.bookTitle && this.form.date && this.form.address) {
@@ -2796,7 +2799,7 @@ __webpack_require__.r(__webpack_exports__);
       if (!this.form.age == null) {
         this.validationErrors.age = 'Age is required.';
       } else {
-        if (!this.isAgeValid(this.form.bookTitle)) {
+        if (!this.isAgeValid()) {
           this.validationErrors.age = 'Please enter a valid age';
         } else {
           this.validationErrors.age = null;
@@ -2813,19 +2816,28 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
 
-      if (!this.form.date == null) {
+      if (!this.form.date) {
         this.validationErrors.date = 'Release date is required.';
       }
+
+      console.log(this.validationErrors);
     },
     isNameValid: function isNameValid(str) {
       var re = /^[A-Za-z ]+$/;
-      console.log(re.test(str));
       return re.test(str);
     },
     isAgeValid: function isAgeValid() {
       var re = /^\d{1,3}$/;
-      console.log(re.test(this.form.age));
       return re.test(this.form.age);
+    },
+    checkErrors: function checkErrors() {
+      var values = Object.values(this.validationErrors);
+      console.log(values.every(function (element) {
+        return element === null;
+      }));
+      return values.every(function (element) {
+        return element === null;
+      });
     }
   }
 });
@@ -49152,7 +49164,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", { staticClass: "col-lg-5 col-sm-12 offset-md-1 " }, [
+  return _c("section", [
     _c(
       "button",
       {
@@ -49201,7 +49213,7 @@ var render = function() {
                   ]),
                   _vm._v(" "),
                   _c("li", { staticClass: "list-group-item" }, [
-                    _vm._v("Authore address: " + _vm._s(book.author.address))
+                    _vm._v("Author address: " + _vm._s(book.author.address))
                   ]),
                   _vm._v(" "),
                   _c("li", { staticClass: "list-group-item" }, [
@@ -49240,9 +49252,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("section", { staticClass: "col-lg-6 col-sm-8 mb-3" }, [
-    _c("h1", { staticClass: "mb-3" }, [_vm._v("Create New Book")]),
-    _vm._v(" "),
+  return _c("section", { staticClass: "mb-3" }, [
     _vm.errors.response
       ? _c(
           "div",
@@ -49272,6 +49282,7 @@ var render = function() {
     _c(
       "form",
       {
+        staticClass: "form",
         attrs: { method: "post" },
         on: {
           keyup: _vm.formValidation,

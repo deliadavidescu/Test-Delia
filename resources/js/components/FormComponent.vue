@@ -1,6 +1,5 @@
 <template>
-    <section class="col-lg-6 col-sm-8 mb-3">
-        <h1 class="mb-3">Create New Book</h1>
+    <section class="mb-3">
         <div v-if="errors.response" class="alert alert-danger">
             <p v-for="error in errors.response.data.errors">{{error[0]}}</p>
         </div>
@@ -10,7 +9,7 @@
         <div v-if="success" class="alert alert-success">
             <p>Your form was sucessfully submitted.</p>
         </div>
-        <form method="post" @keyup="formValidation" @submit.prevent="createNewInput">
+        <form class="form" method="post" @keyup="formValidation" @submit.prevent="createNewInput">
             <div class="form-group">
                 <label for="title">Book Title</label>
                 <input type="text" v-bind:class="{'is-invalid' : validationErrors.bookTitle}"
@@ -93,20 +92,23 @@
         methods: {
 
             createNewInput() {
-                axios.post('/api/create', this.form)
-                    .then((response) => {
-                        this.$store.dispatch('loadData');
-                        this.form = _.mapValues(this.form, () => null);
-                        this.errors = [];
-                        var obj = this;
-                        setTimeout(function () {
-                            obj.success = false;
-                        }, 2000);
-                        console.log(response);
+                console.log(this.checkErrors())
+                if (this.checkErrors()) {
+                    axios.post('/api/create', this.form)
+                        .then((response) => {
+                            this.$store.dispatch('loadData');
+                            this.form = _.mapValues(this.form, () => null);
+                            this.errors = [];
+                            var obj = this;
+                            setTimeout(function () {
+                                obj.success = false;
+                            }, 2000);
+                            console.log(response);
 
-                    }).catch((error) => {
-                    this.errors = error;
-                });
+                        }).catch((error) => {
+                        this.errors = error;
+                    });
+                }
             },
 
             formValidation() {
@@ -129,7 +131,7 @@
                 if (!this.form.age == null) {
                     this.validationErrors.age = 'Age is required.';
                 } else {
-                    if (!this.isAgeValid(this.form.bookTitle)) {
+                    if (!this.isAgeValid()) {
                         this.validationErrors.age = 'Please enter a valid age';
                     } else {
                         this.validationErrors.age = null;
@@ -145,22 +147,28 @@
                     }
 
                 }
-                if (!this.form.date == null) {
+                if (!this.form.date) {
                     this.validationErrors.date = 'Release date is required.';
                 }
+                console.log(this.validationErrors)
             },
 
             isNameValid(str) {
                 let re = /^[A-Za-z ]+$/;
-                console.log(re.test(str))
                 return re.test(str);
             },
             isAgeValid() {
                 let re = /^\d{1,3}$/;
-                console.log(re.test(this.form.age))
                 return re.test(this.form.age)
 
+            },
+            checkErrors() {
+                const values = Object.values(this.validationErrors);
+                console.log(values.every(element => element === null));
+                return values.every(element => element === null)
             }
+
         }
     }
+
 </script>

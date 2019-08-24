@@ -1,0 +1,14 @@
+.form{
+    width:100%;
+    max-width:500px;
+    height:auto;
+    margin:0 auto;
+    padding:3em;
+    background-color:$gray-background-color;
+    border-radius:40px 0;
+}
+
+input{
+    border:.5px solid #DADADA;
+    box-shadow:0 0 5px;
+}
