@@ -49259,7 +49259,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("section", { staticClass: "mb-3" }, [
     _vm.success
-      ? _c("div", { staticClass: "alert alert-success success-msg" }, [
+      ? _c("div", { staticClass: "alert alert-success success-msg my-4" }, [
           _c("p", [_vm._v("Your form was sucessfully submitted.")])
         ])
       : _vm._e(),

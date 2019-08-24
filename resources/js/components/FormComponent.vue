@@ -1,6 +1,6 @@
 <template>
     <section class="mb-3">
-        <div v-if="success" class="alert alert-success success-msg">
+        <div v-if="success" class="alert alert-success success-msg my-4">
             <p>Your form was sucessfully submitted.</p>
         </div>
         <form class="form" @click="clearServerErrors()" method="post" @submit.prevent="createNewInput">
