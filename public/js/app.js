@@ -2729,6 +2729,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -2740,25 +2741,32 @@ __webpack_require__.r(__webpack_exports__);
         age: null,
         date: null
       },
-      errors: [],
-      success: false,
       validationErrors: {
         authorName: null,
         bookTitle: null,
         address: null,
         age: null,
         date: null
-      }
+      },
+      errors: [],
+      success: false,
+      focus: false
     };
   },
   methods: {
     createNewInput: function createNewInput() {
       var _this = this;
 
-      console.log(this.checkErrors());
+      var token = document.head.querySelector('meta[name="csrf-token"]');
+      var headers = {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-TOKEN': token.content
+      };
 
       if (this.checkErrors()) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form).then(function (response) {
+        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form, {
+          headers: headers
+        }).then(function (response) {
           _this.$store.dispatch('loadData');
 
           _this.form = _.mapValues(_this.form, function () {
@@ -2774,53 +2782,6 @@ __webpack_require__.r(__webpack_exports__);
           _this.errors = error;
         });
       }
-    },
-    formValidation: function formValidation() {
-      if (this.form.authorName && this.form.age && this.form.bookTitle && this.form.date && this.form.address) {
-        this.validationErrors = _.mapValues(this.validationErrors, function () {
-          return null;
-        });
-      }
-
-      if (!this.form.authorName) {
-        this.validationErrors.authorName = 'Author name is required.';
-      } else {
-        if (!this.isNameValid(this.form.authorName)) {
-          this.validationErrors.authorName = 'Please enter a valid name';
-        } else {
-          this.validationErrors.authorName = null;
-        }
-      }
-
-      if (!this.form.address) {
-        this.validationErrors.address = 'Address is required.';
-      }
-
-      if (!this.form.age == null) {
-        this.validationErrors.age = 'Age is required.';
-      } else {
-        if (!this.isAgeValid()) {
-          this.validationErrors.age = 'Please enter a valid age';
-        } else {
-          this.validationErrors.age = null;
-        }
-      }
-
-      if (!this.form.bookTitle == null) {
-        this.validationErrors.bookTitle = 'Book title is required.';
-      } else {
-        if (!this.isNameValid(this.form.bookTitle)) {
-          this.validationErrors.bookTitle = 'Please enter a valid name';
-        } else {
-          this.validationErrors.bookTitle = null;
-        }
-      }
-
-      if (!this.form.date) {
-        this.validationErrors.date = 'Release date is required.';
-      }
-
-      console.log(this.validationErrors);
     },
     isNameValid: function isNameValid(str) {
       var re = /^[A-Za-z ]+$/;
@@ -2838,6 +2799,25 @@ __webpack_require__.r(__webpack_exports__);
       return values.every(function (element) {
         return element === null;
       });
+    },
+    wrongName: function wrongName(event) {
+      var str = event.target.name;
+      var obj = this.form;
+      var errors = this.validationErrors;
+      console.log(obj[str]);
+
+      if (!this.isNameValid(obj[str])) {
+        errors[str] = 'Please enter only letters';
+      } else {
+        errors[str] = null;
+      }
+    },
+    wrongAge: function wrongAge() {
+      if (!this.isAgeValid()) {
+        this.validationErrors.age = 'Please enter a valid age';
+      } else {
+        this.validationErrors.age = null;
+      }
     }
   }
 });
@@ -49285,7 +49265,6 @@ var render = function() {
         staticClass: "form",
         attrs: { method: "post" },
         on: {
-          keyup: _vm.formValidation,
           submit: function($event) {
             $event.preventDefault()
             return _vm.createNewInput($event)
@@ -49311,16 +49290,22 @@ var render = function() {
               type: "text",
               id: "title",
               placeholder: "Enter Book Title",
-              name: "title"
+              name: "bookTitle",
+              required: ""
             },
             domProps: { value: _vm.form.bookTitle },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "bookTitle", $event.target.value)
+                },
+                function($event) {
+                  return _vm.wrongName($event)
                 }
-                _vm.$set(_vm.form, "bookTitle", $event.target.value)
-              }
+              ]
             }
           }),
           _vm._v(" "),
@@ -49355,7 +49340,8 @@ var render = function() {
               type: "date",
               id: "release_date",
               placeholder: "Enter email",
-              name: "date"
+              name: "date",
+              required: ""
             },
             domProps: { value: _vm.form.date },
             on: {
@@ -49397,16 +49383,22 @@ var render = function() {
               type: "text",
               id: "author",
               placeholder: "Enter Author Name",
-              name: "name"
+              name: "authorName",
+              required: ""
             },
             domProps: { value: _vm.form.authorName },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "authorName", $event.target.value)
+                },
+                function($event) {
+                  return _vm.wrongName($event)
                 }
-                _vm.$set(_vm.form, "authorName", $event.target.value)
-              }
+              ]
             }
           }),
           _vm._v(" "),
@@ -49441,7 +49433,8 @@ var render = function() {
               type: "text",
               id: "address",
               placeholder: "Enter Author Address",
-              name: "address"
+              name: "address",
+              required: ""
             },
             domProps: { value: _vm.form.address },
             on: {
@@ -49483,16 +49476,22 @@ var render = function() {
               type: "text",
               id: "age",
               placeholder: "Enter Author Age",
-              name: "age"
+              name: "age",
+              required: ""
             },
             domProps: { value: _vm.form.age },
             on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+              input: [
+                function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.$set(_vm.form, "age", $event.target.value)
+                },
+                function($event) {
+                  return _vm.wrongAge()
                 }
-                _vm.$set(_vm.form, "age", $event.target.value)
-              }
+              ]
             }
           }),
           _vm._v(" "),
@@ -62796,15 +62795,14 @@ if (token) {
 /*!****************************************************!*\
   !*** ./resources/js/components/BooksComponent.vue ***!
   \****************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _BooksComponent_vue_vue_type_template_id_6de819c4___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./BooksComponent.vue?vue&type=template&id=6de819c4& */ "./resources/js/components/BooksComponent.vue?vue&type=template&id=6de819c4&");
 /* harmony import */ var _BooksComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./BooksComponent.vue?vue&type=script&lang=js& */ "./resources/js/components/BooksComponent.vue?vue&type=script&lang=js&");
-/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _BooksComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__) if(__WEBPACK_IMPORT_KEY__ !== 'default') (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _BooksComponent_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__[key]; }) }(__WEBPACK_IMPORT_KEY__));
-/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
 
 
 
@@ -62834,7 +62832,7 @@ component.options.__file = "resources/js/components/BooksComponent.vue"
 /*!*****************************************************************************!*\
   !*** ./resources/js/components/BooksComponent.vue?vue&type=script&lang=js& ***!
   \*****************************************************************************/
-/*! no static exports found */
+/*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
