@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import 'babel-polyfill'
-import axios from 'axios/index';
+import axiosRequest from "./axiosRequest";
 
 window.Vue = require('vue');
 Vue.use(Vuex);
@@ -24,7 +24,7 @@ export default new Vuex.Store({
 
     actions: {
         loadData: async (context) => {
-            const data = await axios.get('/api/books')
+            const data = await axiosRequest.get('/api/books')
             context.commit('SET_BOOK', data)
         }
 

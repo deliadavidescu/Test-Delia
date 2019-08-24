@@ -13,6 +13,9 @@
                             <li class="list-group-item">Release date: {{book.release_date}}</li>
                             <li class="list-group-item">Author address: {{book.author.address}}</li>
                             <li class="list-group-item">Author Age: {{book.author.age}} years</li>
+                            <li class="list-group-item d-flex">
+                                <button class="btn btn-danger" @click="deleteBook(book)">Delete</button>
+                            </li>
                         </ul>
 
                     </div>
@@ -23,6 +26,8 @@
 </template>
 
 <script>
+    import axiosRequest from "../axiosRequest";
+
     export default {
         data() {
             return {
@@ -31,6 +36,18 @@
         },
         mounted() {
             this.$store.dispatch('loadData');
+        },
+        methods: {
+            deleteBook(book) {
+                axiosRequest.post('/api/books/' + book.id)
+                    .then((response) => {
+                        this.$store.dispatch('loadData');
+                        console.log(response);
+
+                    }).catch((error) => {
+                    console.log(error)
+                });
+            }
         },
         computed: {
             Books() {

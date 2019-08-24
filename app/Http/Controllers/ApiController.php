@@ -96,11 +96,17 @@ class ApiController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Books $books
+     * @param int $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Books $books) {
-        //
+    public function destroy($id) {
+        $book = Books::findOrFail($id);
+        $book ->delete();
+
+        return response()->json(null, 204);
+
+
+
     }
 }

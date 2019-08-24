@@ -81,7 +81,7 @@
 </template>
 
 <script>
-    import axios from 'axios'
+    import axiosRequest from '../axiosRequest'
 
     export default {
         data() {
@@ -114,31 +114,24 @@
         },
         methods: {
             createNewInput() {
-                let token = document.head.querySelector('meta[name="csrf-token"]');
-                const headers = {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': token.content
-                };
+                axiosRequest.post('/api/create', this.form)
+                    .then((response) => {
+                        this.$store.dispatch('loadData');
+                        this.form = _.mapValues(this.form, () => null);
+                        this.serverErrors = _.mapValues(this.serverErrors, () => null);
+                        let obj = this;
+                        this.success = true;
+                        setTimeout(function () {
+                            obj.success = false;
+                        }, 3000);
+                        console.log(response);
 
-                if (this.checkErrors()) {
-                    axios.post('/api/create', this.form, {headers: headers})
-                        .then((response) => {
-                            this.$store.dispatch('loadData');
-                            this.form = _.mapValues(this.form, () => null);
-                            this.serverErrors = _.mapValues(this.serverErrors, () => null);
-                            let obj = this;
-                            this.success = true;
-                            setTimeout(function () {
-                                obj.success = false;
-                            }, 3000);
-                            console.log(response);
+                    }).catch((error) => {
+                    this.serverErrors = error.response.data.errors;
+                });
+            }
 
-                        }).catch((error) => {
-                        this.serverErrors = error.response.data.errors;
-                    });
-                }
-
-            },
+            ,
 
             clearServerErrors() {
                 this.serverErrors = _.mapValues(this.serverErrors, () => null);

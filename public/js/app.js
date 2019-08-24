@@ -2609,6 +2609,7 @@ module.exports = function isBuffer (obj) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _axiosRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../axiosRequest */ "./resources/js/axiosRequest.js");
 //
 //
 //
@@ -2633,6 +2634,10 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2641,6 +2646,19 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     this.$store.dispatch('loadData');
+  },
+  methods: {
+    deleteBook: function deleteBook(book) {
+      var _this = this;
+
+      _axiosRequest__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/books/' + book.id).then(function (response) {
+        _this.$store.dispatch('loadData');
+
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    }
   },
   computed: {
     Books: function Books() {
@@ -2660,8 +2678,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _axiosRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../axiosRequest */ "./resources/js/axiosRequest.js");
 //
 //
 //
@@ -2777,34 +2794,24 @@ __webpack_require__.r(__webpack_exports__);
     createNewInput: function createNewInput() {
       var _this = this;
 
-      var token = document.head.querySelector('meta[name="csrf-token"]');
-      var headers = {
-        'X-Requested-With': 'XMLHttpRequest',
-        'X-CSRF-TOKEN': token.content
-      };
+      _axiosRequest__WEBPACK_IMPORTED_MODULE_0__["default"].post('/api/create', this.form).then(function (response) {
+        _this.$store.dispatch('loadData');
 
-      if (this.checkErrors()) {
-        axios__WEBPACK_IMPORTED_MODULE_0___default.a.post('/api/create', this.form, {
-          headers: headers
-        }).then(function (response) {
-          _this.$store.dispatch('loadData');
-
-          _this.form = _.mapValues(_this.form, function () {
-            return null;
-          });
-          _this.serverErrors = _.mapValues(_this.serverErrors, function () {
-            return null;
-          });
-          var obj = _this;
-          _this.success = true;
-          setTimeout(function () {
-            obj.success = false;
-          }, 3000);
-          console.log(response);
-        })["catch"](function (error) {
-          _this.serverErrors = error.response.data.errors;
+        _this.form = _.mapValues(_this.form, function () {
+          return null;
         });
-      }
+        _this.serverErrors = _.mapValues(_this.serverErrors, function () {
+          return null;
+        });
+        var obj = _this;
+        _this.success = true;
+        setTimeout(function () {
+          obj.success = false;
+        }, 3000);
+        console.log(response);
+      })["catch"](function (error) {
+        _this.serverErrors = error.response.data.errors;
+      });
     },
     clearServerErrors: function clearServerErrors() {
       this.serverErrors = _.mapValues(this.serverErrors, function () {
@@ -49223,6 +49230,21 @@ var render = function() {
                   _vm._v(" "),
                   _c("li", { staticClass: "list-group-item" }, [
                     _vm._v("Author Age: " + _vm._s(book.author.age) + " years")
+                  ]),
+                  _vm._v(" "),
+                  _c("li", { staticClass: "list-group-item d-flex" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteBook(book)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
                   ])
                 ])
               ])
@@ -62794,6 +62816,43 @@ new Vue({
 
 /***/ }),
 
+/***/ "./resources/js/axiosRequest.js":
+/*!**************************************!*\
+  !*** ./resources/js/axiosRequest.js ***!
+  \**************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
+var token = document.head.querySelector('meta[name="csrf-token"]');
+var headers = {
+  'X-Requested-With': 'XMLHttpRequest',
+  'X-CSRF-TOKEN': token.content
+};
+
+function httpRequest(method, url, request) {
+  return axios__WEBPACK_IMPORTED_MODULE_0___default.a[method](url, request, {
+    headers: headers
+  });
+}
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  get: function get(url) {
+    var request = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return httpRequest('get', url, request);
+  },
+  post: function post(url) {
+    var request = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+    return httpRequest('post', url, request);
+  }
+});
+
+/***/ }),
+
 /***/ "./resources/js/bootstrap.js":
 /*!***********************************!*\
   !*** ./resources/js/bootstrap.js ***!
@@ -63004,8 +63063,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! babel-polyfill */ "./node_modules/babel-polyfill/lib/index.js");
 /* harmony import */ var babel_polyfill__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(babel_polyfill__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var axios_index__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios/index */ "./node_modules/axios/index.js");
-/* harmony import */ var axios_index__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(axios_index__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _axiosRequest__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./axiosRequest */ "./resources/js/axiosRequest.js");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -63043,7 +63101,7 @@ Vue.use(vuex__WEBPACK_IMPORTED_MODULE_1__["default"]);
             switch (_context.prev = _context.next) {
               case 0:
                 _context.next = 2;
-                return axios_index__WEBPACK_IMPORTED_MODULE_3___default.a.get('/api/books');
+                return _axiosRequest__WEBPACK_IMPORTED_MODULE_3__["default"].get('/api/books');
 
               case 2:
                 data = _context.sent;
